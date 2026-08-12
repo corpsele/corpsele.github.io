@@ -13,10 +13,19 @@
             /* 一行代码解决90%宽度问题 */
         }
 
+        /* 1. 声明字体 */
+        @font-face {
+            font-family: "han-regular-cursive-font";           /* 给字体起个名字 */
+            src: url("./han-regular-cursive.ttf") format("truetype");  /* 指向同级 ttf */
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;                     /* 防止字体加载时白屏 */
+        }
+
         /* 全局样式：设置字体、颜色和字体大小 */
         body {
             /* font-family: "汉仪细行楷简", serif; */
-            font-family: "汉仪细行楷简";
+            font-family: "han-regular-cursive-font";
             /* 若系统无指定字体，使用备用serif字体 */
             color: #000;
             /* 黑色 */
@@ -41,7 +50,7 @@
             font-size: 120px;
             width: 100%;
             /* 宽度自适应父容器 */
-            font-family: "汉仪细行楷简";
+            font-family: "han-regular-cursive-font";
             border: 1px solid #ccc;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             /* 水平偏移 垂直偏移 模糊半径 颜色 */
