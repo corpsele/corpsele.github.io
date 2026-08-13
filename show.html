@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>内容展示</title>
+    <style>
+        * { box-sizing: border-box; }
+
+        @font-face {
+            font-family: "han-regular-cursive-font";           /* 给字体起个名字 */
+            src: url("./han-regular-cursive.ttf") format("truetype");  /* 指向同级 ttf */
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;                     /* 防止字体加载时白屏 */
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+            margin: 0; padding: 20px;
+            background: #f5f5f5;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        h1 { color: #333; }
+        .meta {
+            color: #888;
+            font-size: 13px;
+            margin-bottom: 16px;
+        }
+        .content-box {
+            font-size: 120px;
+            width: 100%;
+            /* 宽度自适应父容器 */
+            font-family: "han-regular-cursive-font";
+            background: white;
+            border: 1px solid #ddd;
+            /* border-radius: 8px; */
+            /* padding: 20px; */
+            min-height: 400px;
+            /* 关键：保留换行和空格 */
+            white-space: pre-wrap;
+            word-break: break-all;
+            line-height: 1.8;
+            /* font-size: 15px; */
+            /* overflow-y: auto; */
+            /* max-height: 70vh; */
+        }
+        .empty {
+            text-align: center;
+            color: #aaa;
+            padding: 60px 20px;
+        }
+        .bottom-bar {
+            position: sticky;
+            bottom: 0;
+            background: white;
+            padding: 16px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin: 20px -20px -20px;
+        }
+        button {
+            padding: 12px 32px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: #007acc;
+            color: white;
+        }
+        .btn-primary:hover { background: #005a9e; }
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- <h1>内容展示</h1>
+        <div class="meta">字符数：<span id="charCount">0</span></div> -->
+        
+        <div class="content-box" id="contentBox"></div>
+        
+        <!-- <div class="bottom-bar">
+            <button class="btn-secondary" onclick="copyContent()">📋 复制内容</button>
+            <button class="btn-primary" onclick="goBack()">← 返回编辑</button>
+        </div> -->
+    </div>
+
+    <script>
+        const KEY = "textarea_content";
+        const KEY_FONTSIZE = "show_font_size";
+        const contentBox = document.getElementById("contentBox");
+        const charCount = document.getElementById("charCount");
+
+        // 页面加载时读取 sessionStorage
+        window.addEventListener("DOMContentLoaded", () => {
+            const text = sessionStorage.getItem(KEY);
+            if (text) {
+                // 用 textContent 而不是 innerHTML，避免 XSS / HTML 注入
+                contentBox.textContent = text;
+                // charCount.textContent = text.length;
+
+                // 2. 读取字号并应用到 .content-box（核心）
+            const fontSize = sessionStorage.getItem(KEY_FONTSIZE) || "120";
+            contentBox.style.fontSize = fontSize + "px";
+            
+                
+                // 读取后删除，避免刷新页面重复显示旧数据
+                // sessionStorage.removeItem(KEY);  // 取消注释即可启用
+            } else {
+                contentBox.innerHTML = '<div class="empty">没有找到内容<br>请先在输入页填写内容</div>';
+            }
+        });
+
+        // 复制内容到剪贴板
+        function copyContent() {
+            const text = sessionStorage.getItem(KEY) || "";
+            if (!text) {
+                alert("没有可复制的内容");
+                return;
+            }
+            navigator.clipboard.writeText(text).then(() => {
+                alert("内容已复制到剪贴板");
+            }).catch(err => {
+                // 降级方案
+                const ta = document.createElement("textarea");
+                ta.value = text;
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand("copy");
+                document.body.removeChild(ta);
+                alert("内容已复制到剪贴板");
+            });
+        }
+
+        // 返回编辑页
+        function goBack() {
+            window.location.href = "my_word_tr.html";
+        }
+    </script>
+</body>
+</html>
