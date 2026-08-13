@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>my word</title>
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            /* 一行代码解决90%宽度问题 */
+        }
+
+        /* 1. 声明字体 */
+        @font-face {
+            font-family: "han-regular-cursive-font";           /* 给字体起个名字 */
+            src: url("./han-regular-cursive.ttf") format("truetype");  /* 指向同级 ttf */
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;                     /* 防止字体加载时白屏 */
+        }
+
+        /* 全局样式：设置字体、颜色和字体大小 */
+        body {
+            /* font-family: "汉仪细行楷简", serif; */
+            font-family: "汉仪细行楷简";
+            /* 若系统无指定字体，使用备用serif字体 */
+            color: #000;
+            /* 黑色 */
+            margin: 0;
+            /* 清除默认边距 */
+            font-size: 120px;
+        }
+
+        /* 纯文本容器样式 */
+        #textSection {
+            font-size: 120px;
+            padding: 20px;
+            /* 添加内边距提升可读性 */
+            user-select: none;
+            /* 禁止文本选中（增强不可编辑性） */
+            cursor: default;
+            /* 光标样式为默认箭头 */
+        }
+
+        /* 文本输入框样式 */
+        #inputSection {
+            font-size: 120px;
+            width: 100%;
+            /* 宽度自适应父容器 */
+            font-family: "汉仪细行楷简";
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            /* 水平偏移 垂直偏移 模糊半径 颜色 */
+            height: 1500px;
+        }
+
+        /* 定位锚点优化：确保跳转后内容可见 */
+        #textSection,
+        #inputSection {
+            scroll-margin-top: 80px;
+            /* 顶部预留空间，避免被导航栏遮挡 */
+        }
+
+        /* 1. 自适应宽度容器 */
+        .responsive-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            background-color: #f5f7fa;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            font-size: 120px;
+            padding: 20px;
+            /* 添加内边距提升可读性 */
+            user-select: none;
+            /* 禁止文本选中（增强不可编辑性） */
+            cursor: default;
+            /* 光标样式为默认箭头 */
+            overflow-wrap: anywhere;
+        }
+
+        header {
+            padding: 20px 0;
+            text-align: center;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        .content {
+            padding: 30px 0;
+        }
+
+        /* 2. 返回顶部按钮 */
+        .back-to-top {
+            position: fixed;
+            right: 30px;
+            bottom: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: #4285f4;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            text-decoration: none;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        .back-to-top:hover {
+            background-color: #3367d6;
+            transform: translateY(-3px);
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+
+<body> <!-- 导航链接 -->
+    <div style="text-align: center;"> <a href="#textSection">跳转到纯文本</a> | <a href="#inputSection">跳转到输入框</a> </div>
+    <!-- 纯文本容器（不可输入） -->
+    <div class="responsive-container"> 这是不可编辑的纯文本内容，字体已应用。
+    </div>
+    <div class="responsive-container">
+        abcdefghijklmnopqrstuvwxyz
+    </div>
+    <div class="responsive-container">
+        ABCDEFGHIJKLMNOPQRSTUVWYYZ
+    </div>
+    <div class="responsive-container">
+        1234567890
+    </div>
+    <br>
+    <!-- 可输入文本框 -->
+    <textarea id="inputSection" placeholder="在此输入文本" ></textarea> 
+    <div style="text-align: center; margin-top: 200px;">
+        <a href="#textSection">返回顶部纯文本</a> | <a href="#inputSection">返回输入框</a>
+    </div>
+
+
+    <!-- 2. 返回顶部按钮 -->
+    <a href="#" class="back-to-top" id="backToTop">↑</a>
+
+    <script>
+        // 返回顶部功能实现
+        document.addEventListener('DOMContentLoaded', function () {
+            const backToTopButton = document.getElementById('backToTop');
+
+            // 滚动事件监听
+            window.addEventListener('scroll', function () {
+                // 当滚动超过200px时显示按钮
+                if (window.pageYOffset > 200) {
+                    backToTopButton.classList.add('show');
+                } else {
+                    backToTopButton.classList.remove('show');
+                }
+            });
+
+            // 点击事件处理
+            backToTopButton.addEventListener('click', function (e) {
+                e.preventDefault();
+                // 平滑滚动回顶部
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
